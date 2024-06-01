@@ -5,13 +5,10 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY '1234';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
 
 -- 3. member 테이블에 관리자 계정 추가
--- name이 이미 존재하는지 확인
-SELECT COUNT(*) FROM `member` WHERE `name` = 'Admin';
-
--- COUNT(*)이 0이면 name이 존재하지 않으므로 INSERT
+-- 관리자 계정 name이 존재하지 않으면 insert
 INSERT INTO `member` (`member_id`, `name`, `phonenumber`, `email`, `role`)
-SELECT 0, 'Admin', '01073947182', 'admin@example.com', 'ADMIN'
-WHERE (SELECT COUNT(*) FROM `member` WHERE `name` = 'Admin') = 0;
+SELECT 0, 'root', '01073947182', 'admin@example.com', 'ADMIN'
+WHERE (SELECT COUNT(*) FROM `member` WHERE `name` = 'root') = 0;
 
 -- procedure 함수 초기화
 DROP PROCEDURE IF EXISTS InitializeDatabase;
@@ -110,17 +107,33 @@ BEGIN
         
         INSERT INTO `schedule` (`created_at`, `screening_day`, `screening_count`, `start_time`, `end_time`, `movie_id`, `theater_id`)
         VALUES
-        ('2024-01-01', '월요일', 2, '2023-01-01 10:00:00', DATE_ADD('2023-01-01 10:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '바람막이') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '바람막이'), 'A'),
-        ('2024-01-02', '화요일', 3, '2023-02-01 13:00:00', DATE_ADD('2023-02-01 13:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '모 아니면 도') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '모 아니면 도'), 'B'),
-        ('2024-01-03', '수요일', 4, '2023-03-01 09:00:00', DATE_ADD('2023-03-01 09:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '서프라이즈') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '서프라이즈'), 'C'),
-        ('2024-01-04', '목요일', 5, '2023-04-01 11:00:00', DATE_ADD('2023-04-01 11:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '수첩') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '수첩'), 'A'),
-        ('2024-01-05', '금요일', 2, '2023-05-01 15:00:00', DATE_ADD('2023-05-01 15:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '환경과 유전') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '환경과 유전'), 'B'),
-        ('2024-01-01', '월요일', 2, '2023-01-01 10:00:00', DATE_ADD('2023-01-01 10:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '바람막이') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '바람막이'), 'A'),
-        ('2024-01-02', '화요일', 3, '2023-02-01 13:00:00', DATE_ADD('2023-02-01 13:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '모 아니면 도') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '모 아니면 도'), 'B'),
-        ('2024-01-03', '수요일', 4, '2023-03-01 09:00:00', DATE_ADD('2023-03-01 09:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '서프라이즈') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '서프라이즈'), 'C'),
-        ('2024-01-04', '목요일', 5, '2023-04-01 11:00:00', DATE_ADD('2023-04-01 11:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '수첩') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '수첩'), 'A'),
-        ('2024-01-05', '금요일', 2, '2023-05-01 15:00:00', DATE_ADD('2023-05-01 15:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '환경과 유전') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '환경과 유전'), 'B');
+        ('2024-01-01', '월요일', 2, '2024-02-01 10:00:00', DATE_ADD('2024-02-01 10:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '바람막이') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '바람막이'), 'A'),
+        ('2024-01-02', '화요일', 3, '2024-02-02 13:00:00', DATE_ADD('2024-02-02 13:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '모 아니면 도') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '모 아니면 도'), 'B'),
+        ('2024-01-03', '수요일', 4, '2024-03-01 09:00:00', DATE_ADD('2024-03-01 09:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '서프라이즈') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '서프라이즈'), 'C'),
+        ('2024-01-04', '목요일', 5, '2024-04-01 11:00:00', DATE_ADD('2024-04-01 11:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '수첩') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '수첩'), 'A'),
+        ('2024-01-05', '금요일', 2, '2024-05-01 15:00:00', DATE_ADD('2024-05-01 15:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '환경과 유전') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '환경과 유전'), 'B'),
+        ('2024-01-01', '월요일', 2, '2024-02-01 15:00:00', DATE_ADD('2024-02-01 15:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '움이의 세계') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '움이의 세계'), 'D'),
+        ('2024-01-02', '화요일', 3, '2024-02-02 09:00:00', DATE_ADD('2024-02-02 09:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '베이징의 연인') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '베이징의 연인'), 'F'),
+        ('2024-01-03', '수요일', 4, '2024-03-01 17:00:00', DATE_ADD('2024-03-01 17:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '어둠') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '어둠'), 'C'),
+        ('2024-01-04', '목요일', 5, '2024-04-01 18:00:00', DATE_ADD('2024-04-01 18:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '판타지') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '판타지'), 'E'),
+        ('2024-01-05', '금요일', 2, '2024-05-01 10:00:00', DATE_ADD('2024-05-01 10:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '노래') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '노래'), 'B'),
+        ('2024-01-01', '월요일', 2, '2024-02-01 20:00:00', DATE_ADD('2024-02-01 20:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '신비') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '신비'), 'A'),
+        ('2024-01-02', '화요일', 3, '2024-02-02 18:00:00', DATE_ADD('2024-02-02 18:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '서스펜스') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '서스펜스'), 'B'),
         
+        ('2024-01-08', '월요일', 3, '2024-02-01 10:00:00', DATE_ADD('2024-02-01 10:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '바람막이') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '바람막이'), 'F'),
+        ('2024-01-09', '화요일', 4, '2024-02-02 13:00:00', DATE_ADD('2024-02-02 13:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '모 아니면 도') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '모 아니면 도'), 'D'),
+        ('2024-01-10', '수요일', 5, '2024-03-01 09:00:00', DATE_ADD('2024-03-01 09:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '서프라이즈') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '서프라이즈'), 'C'),
+        ('2024-01-11', '목요일', 6, '2024-04-01 11:00:00', DATE_ADD('2024-04-01 11:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '수첩') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '수첩'), 'A'),
+        ('2024-01-12', '금요일', 3, '2024-05-01 15:00:00', DATE_ADD('2024-05-01 15:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '환경과 유전') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '환경과 유전'), 'D'),
+        ('2024-01-08', '월요일', 3, '2024-02-01 15:00:00', DATE_ADD('2024-02-01 15:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '움이의 세계') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '움이의 세계'), 'A'),
+        ('2024-01-09', '화요일', 4, '2024-02-01 19:00:00', DATE_ADD('2024-02-01 19:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '베이징의 연인') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '베이징의 연인'), 'B'),
+        ('2024-01-10', '수요일', 5, '2024-03-01 14:00:00', DATE_ADD('2024-03-01 14:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '어둠') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '어둠'), 'F'),
+        ('2024-01-11', '목요일', 6, '2024-04-01 15:00:00', DATE_ADD('2024-04-01 15:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '판타지') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '판타지'), 'A'), 
+        ('2024-01-12', '금요일', 3, '2024-05-01 07:00:00', DATE_ADD('2024-05-01 07:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '노래') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '노래'), 'B'), 
+        ('2024-01-08', '월요일', 3, '2024-02-01 21:00:00', DATE_ADD('2024-02-01 21:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '신비') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '신비'), 'C'), 
+        ('2024-01-09', '화요일', 4, '2024-02-03 08:00:00', DATE_ADD('2024-02-03 08:00:00', INTERVAL (SELECT `showtime` FROM `movie` WHERE `movie_name` = '서스펜스') MINUTE), (SELECT `movie_id` FROM `movie` WHERE `movie_name` = '서스펜스'), 'B'); 
+        
+      
         
         -- 좌석 테이블 생성
         CREATE TABLE `seat` (
@@ -139,7 +152,13 @@ BEGIN
 		('B', 1, 1), ('B', 1, 2), ('B', 1, 3), ('B', 1, 4), ('B', 1, 5),
 		('B', 2, 1), ('B', 2, 2), ('B', 2, 3), ('B', 2, 4), ('B', 2, 5),
 		('C', 1, 1), ('C', 1, 2), ('C', 1, 3), ('C', 1, 4), ('C', 1, 5),
-		('C', 2, 1), ('C', 2, 2), ('C', 2, 3), ('C', 2, 4), ('C', 2, 5);
+		('C', 2, 1), ('C', 2, 2), ('C', 2, 3), ('C', 2, 4), ('C', 2, 5),
+        ('D', 1, 1), ('D', 1, 2), ('D', 1, 3), ('D', 1, 4), ('D', 1, 5),
+		('D', 2, 1), ('D', 2, 2), ('D', 2, 3), ('D', 2, 4), ('D', 2, 5),
+        ('E', 1, 1), ('E', 1, 2), ('E', 1, 3), ('E', 1, 4), ('E', 1, 5),
+		('E', 2, 1), ('E', 2, 2), ('E', 2, 3), ('E', 2, 4), ('E', 2, 5),
+        ('F', 1, 1), ('F', 1, 2), ('F', 1, 3), ('F', 1, 4), ('F', 1, 5),
+		('F', 2, 1), ('F', 2, 2), ('F', 2, 3), ('F', 2, 4), ('F', 2, 5);
         
         -- 멤버 테이블 생성
         INSERT INTO `member` (`member_id`, `name`, `phonenumber`, `email`, `role`)
@@ -174,18 +193,31 @@ BEGIN
 
 		INSERT INTO `reservation` (`member_id`, `schedule_id`, `seat_id`, `reservation_created_at`, `reservation_status`)
 		VALUES
-		(1, 1, 1, '2024-01-01 09:00:00', 'CONFIRMED'),
-		(2, 2, 2, '2024-01-02 10:00:00', 'CONFIRMED'),
-		(3, 3, 3, '2024-01-03 11:00:00', 'CONFIRMED'),
-		(4, 4, 4, '2024-01-04 12:00:00', 'CONFIRMED'),
-		(5, 5, 5, '2024-01-05 13:00:00', 'CONFIRMED'),
-		(6, 6, 6, '2024-01-06 14:00:00', 'CONFIRMED'),
-		(7, 7, 1, '2024-01-07 15:00:00', 'CONFIRMED'),
-		(8, 8, 2, '2024-01-08 16:00:00', 'CONFIRMED'),
-		(9, 9, 3, '2024-01-09 17:00:00', 'CONFIRMED'),
-		(10, 10, 4, '2024-01-10 18:00:00', 'CONFIRMED'),
-		(11, 1, 5, '2024-01-11 19:00:00', 'CONFIRMED'),
-		(12, 2, 6, '2024-01-12 20:00:00', 'CONFIRMED');
+		(1, 1, 1, '2024-01-15 09:00:00', 'CONFIRMED'),
+		(2, 2, 12, '2024-01-18 10:00:00', 'CONFIRMED'),
+		(3, 3, 23, '2024-02-03 11:00:00', 'CONFIRMED'),
+		(4, 4, 8, '2024-03-04 12:00:00', 'CONFIRMED'),
+		(5, 5, 18, '2024-04-05 13:00:00', 'CONFIRMED'),
+		(6, 6, 32, '2024-01-06 14:00:00', 'CONFIRMED'),
+		(7, 7, 55, '2024-01-07 15:00:00', 'CONFIRMED'),
+		(8, 8, 24, '2024-02-08 16:00:00', 'CONFIRMED'),
+		(9, 9, 48, '2024-03-09 17:00:00', 'CONFIRMED'),
+		(10, 10, 17, '2024-04-10 18:00:00', 'CONFIRMED'),
+		(11, 11, 29, '2024-01-11 19:00:00', 'CONFIRMED'),
+		(12, 12, 13, '2024-01-12 20:00:00', 'CONFIRMED'),
+        
+        (1, 24, 15, '2024-01-14 09:00:00', 'CONFIRMED'),
+		(2, 23, 22, '2024-01-17 10:00:00', 'CONFIRMED'),
+		(3, 22, 14, '2024-03-28 11:00:00', 'CONFIRMED'),
+		(4, 21, 4, '2024-03-04 12:00:00', 'CONFIRMED'),
+		(5, 20, 57, '2024-02-05 13:00:00', 'CONFIRMED'),
+		(6, 19, 16, '2024-01-28 14:00:00', 'CONFIRMED'),
+		(7, 18, 2, '2024-01-10 15:00:00', 'CONFIRMED'),
+        (8, 17, 32, '2024-04-08 16:00:00', 'CONFIRMED'),
+		(9, 16, 3, '2024-03-09 17:00:00', 'CONFIRMED'),
+		(10, 15, 24, '2024-02-10 18:00:00', 'CONFIRMED'),
+        (11, 14, 38, '2024-01-11 19:00:00', 'CONFIRMED'),
+		(12, 13, 56, '2024-01-12 20:00:00', 'CONFIRMED');
         
         -- 예매 테이블 생성
         CREATE TABLE `ticket` (
@@ -199,18 +231,31 @@ BEGIN
         
 		INSERT INTO `ticket` (`reservation_id`, `ticket_created_at`, `ticket_status`)
 		VALUES
-		(1, '2024-01-01 09:00:00', 'VALID'),
-		(2, '2024-01-02 10:00:00', 'VALID'),
-		(3, '2024-01-03 11:00:00', 'VALID'),
-		(4, '2024-01-04 12:00:00', 'VALID'),
-		(5, '2024-01-05 13:00:00', 'VALID'),
-		(6, '2024-01-06 14:00:00', 'VALID'),
-		(7, '2024-01-07 15:00:00', 'VALID'),
-		(8, '2024-01-08 16:00:00', 'VALID'),
-		(9, '2024-01-09 17:00:00', 'VALID'),
-		(10, '2024-01-10 18:00:00', 'VALID'),
-		(11, '2024-01-11 19:00:00', 'VALID'),
-		(12, '2024-01-12 20:00:00', 'VALID');
+		(1, '2024-01-15 11:00:00', 'VALID'),
+		(2, '2024-01-18 15:00:00', 'VALID'),
+		(3, '2024-02-03 18:00:00', 'VALID'),
+		(4, '2024-03-04 19:00:00', 'VALID'),
+		(5, '2024-04-05 21:00:00', 'VALID'),
+		(6, '2024-01-06 23:00:00', 'VALID'),
+		(7, '2024-01-07 15:20:00', 'VALID'),
+		(8, '2024-02-08 16:50:00', 'VALID'),
+		(9, '2024-03-09 17:10:00', 'VALID'),
+		(10, '2024-04-10 23:00:00', 'VALID'),
+		(11, '2024-01-11 19:50:00', 'VALID'),
+		(12, '2024-01-13 01:00:00', 'VALID'),
+        
+        (1, '2024-01-15 10:00:00', 'VALID'), 
+		(2, '2024-01-18 15:00:00', 'VALID'),
+		(3, '2024-03-30 18:00:00', 'VALID'), 
+		(4, '2024-03-04 19:00:00', 'VALID'), 
+		(5, '2024-02-05 21:00:00', 'VALID'), 
+		(6, '2024-01-28 23:00:00', 'VALID'), 
+		(7, '2024-01-11 15:20:00', 'VALID'), 
+		(8, '2024-04-08 17:50:00', 'VALID'), 
+		(9, '2024-03-09 19:20:00', 'VALID'), 
+		(10, '2024-02-12 23:50:00', 'VALID'), 
+		(11, '2024-01-11 19:50:00', 'VALID'), 
+		(12, '2024-01-13 01:00:00', 'VALID'); 
 
     END IF;
 END//
