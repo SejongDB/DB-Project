@@ -19,7 +19,6 @@ BEGIN
     IF admin_role = 'ADMIN' THEN
         UPDATE ticket t
         JOIN reservation r ON t.reservation_id = r.reservation_id
-        JOIN member m ON r.member_id = m.member_id
         SET t.ticket_status = 'INVALID'
         WHERE r.reservation_id = reservation_id
           AND r.reservation_created_at > t.ticket_created_at;
