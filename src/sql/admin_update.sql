@@ -17,11 +17,10 @@ BEGIN
 
     -- 사용자 역할이 ADMIN일 경우에만 업데이트 쿼리 실행
     IF admin_role = 'ADMIN' THEN
-        UPDATE ticket t
-        JOIN reservation r ON t.reservation_id = r.reservation_id
-        SET t.ticket_status = 'INVALID'
-        WHERE r.reservation_id = reservation_id
-          AND r.reservation_created_at > t.ticket_created_at;
+        UPDATE schedule s
+        JOIN movie m 
+        SET s.theater_id = 'G'
+        WHERE m.movie_id = s.movie_id and m.movie_id = 1;
     ELSE
         SIGNAL SQLSTATE '45000' 
         SET MESSAGE_TEXT = '권한이 없습니다. ADMIN 역할만 해당 작업을 수행할 수 있습니다.';
@@ -31,3 +30,6 @@ DELIMITER ;
 
 -- 프로시저 호출 예시 (관리자의 member_id == 0)
 CALL UpdateTicketStatus(0, 1);
+
+
+select * from schedule;
