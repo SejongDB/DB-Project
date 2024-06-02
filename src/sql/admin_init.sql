@@ -101,7 +101,7 @@ BEGIN
 			`movie_id` INT NOT NULL,
 			`theater_id` VARCHAR(50) NOT NULL,
 			PRIMARY KEY (`schedule_id`),
-			FOREIGN KEY (`movie_id`) REFERENCES `movie`(`movie_id`),
+			FOREIGN KEY (`movie_id`) REFERENCES `movie`(`movie_id`) ON DELETE CASCADE,
 			FOREIGN KEY (`theater_id`) REFERENCES `theater`(`theater_id`)
 		);
         
@@ -238,8 +238,8 @@ BEGIN
 			`schedule_id` INT NOT NULL,
 			`theater_id` VARCHAR(50) NOT NULL,
 			PRIMARY KEY (`ticket_id`),
-			FOREIGN KEY (`reservation_id`) REFERENCES `reservation`(`reservation_id`),
-			FOREIGN KEY (`schedule_id`) REFERENCES `schedule`(`schedule_id`),
+			FOREIGN KEY (`reservation_id`) REFERENCES `reservation`(`reservation_id`) ON DELETE CASCADE,
+			FOREIGN KEY (`schedule_id`) REFERENCES `schedule`(`schedule_id`) ON DELETE CASCADE,
 			FOREIGN KEY (`seat_id`) REFERENCES `seat`(`seat_id`),
 			FOREIGN KEY (`theater_id`) REFERENCES `theater`(`theater_id`)
 		);
