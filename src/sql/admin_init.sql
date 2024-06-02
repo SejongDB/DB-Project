@@ -19,7 +19,7 @@ CREATE PROCEDURE InitializeDatabase()
 BEGIN
     DECLARE admin_role VARCHAR(255);
     
-    -- 관리자의 역할 확인
+    -- 관리자의 역할(role) 확인
     SELECT role INTO admin_role FROM member WHERE role = 'ADMIN' LIMIT 1;
 
     -- 관리자일 경우에만 테이블 초기화
@@ -164,7 +164,10 @@ BEGIN
 		('E', 2, 1, 0), ('E', 2, 2, 0), ('E', 2, 3, 1), ('E', 2, 4, 0), ('E', 2, 5, 0),
         
         ('F', 1, 1, 0), ('F', 1, 2, 0), ('F', 1, 3, 0), ('F', 1, 4, 0), ('F', 1, 5, 1),
-		('F', 2, 1, 1), ('F', 2, 2, 1), ('F', 2, 3, 0), ('F', 2, 4, 0), ('F', 2, 5, 0);
+		('F', 2, 1, 1), ('F', 2, 2, 1), ('F', 2, 3, 0), ('F', 2, 4, 0), ('F', 2, 5, 0),
+        
+        ('G', 1, 1, 0), ('G', 1, 2, 0), ('G', 1, 3, 0), ('G', 1, 4, 0), ('G', 1, 5, 0),
+		('G', 2, 1, 0), ('G', 2, 2, 0), ('G', 2, 3, 0), ('G', 2, 4, 0), ('G', 2, 5, 0);
         
         -- member 테이블 insert
         INSERT INTO `member` (`member_id`, `name`, `phonenumber`, `email`, `role`)
