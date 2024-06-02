@@ -15,7 +15,8 @@ BEGIN
                s.created_at AS 상영일,
                s.theater_id AS 상영관번호,
                t.seat_id AS 좌석번호,
-               t.sale_price AS 판매가격
+               t.sale_price AS 판매가격,
+               t.ticket_id AS 티켓아이디
         FROM reservation r, ticket t, schedule s, movie m
         WHERE (r.member_id = input_member_id and r.reservation_id = t.reservation_id and 
         t.schedule_id = s.schedule_id and s.movie_id = m.movie_id);
