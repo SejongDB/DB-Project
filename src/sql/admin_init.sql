@@ -19,7 +19,7 @@ CREATE PROCEDURE InitializeDatabase()
 BEGIN
     DECLARE admin_role VARCHAR(255);
     
-    -- 관리자의 역할(role) 확인
+    -- 관리자의 역할 확인
     SELECT role INTO admin_role FROM member WHERE role = 'ADMIN' LIMIT 1;
 
     -- 관리자일 경우에만 테이블 초기화
@@ -34,18 +34,18 @@ BEGIN
 
         -- 영화 테이블 생성
         CREATE TABLE `movie` (
-            `movie_id` INT NOT NULL AUTO_INCREMENT,
-            `movie_name` VARCHAR(255) NULL,
-            `showtime` INT NULL,
-            `rating` VARCHAR(255) NULL,
-            `director` VARCHAR(255) NULL,
-            `actor` VARCHAR(255) NULL,
-            `genre` VARCHAR(255) NULL,
-            `instruction` VARCHAR(512) NULL,
-            `movie_created_at` DATETIME NULL,
-            `grade` FLOAT NULL,
-            PRIMARY KEY (`movie_id`)
-        );
+			`movie_id` INT NOT NULL AUTO_INCREMENT,
+			`movie_name` VARCHAR(255) NULL,
+			`showtime` INT NULL,
+			`rating` VARCHAR(255) NULL,
+			`director` VARCHAR(255) NULL,
+			`actor` VARCHAR(255) NULL,
+			`genre` VARCHAR(255) NULL,
+			`instruction` VARCHAR(512) NULL,
+			`movie_created_at` DATETIME NULL,
+			`grade` FLOAT NULL,
+			PRIMARY KEY (`movie_id`)
+		);
         
         INSERT INTO `movie` (`movie_name`, `showtime`, `rating`, `director`, `actor`, `genre`, `instruction`, `movie_created_at`, `grade`)
         VALUES
@@ -63,14 +63,14 @@ BEGIN
         ('서스펜스', 115, 'A', '조은미', '전도연', '스릴러', '긴장감과 반전이 있는 스릴러 영화', '2023-12-01', 5.8);
         
         -- 상영관 테이블 생성
-        CREATE TABLE `theater` (
-            `theater_id` VARCHAR(50) NOT NULL,
-            `theater_availability` TINYINT(1) NULL,
-            `row_seat` INT NULL,
-            `column_seat` INT NULL,
-            `total_seat` INT NULL,
-            PRIMARY KEY (`theater_id`)
-        );
+		CREATE TABLE `theater` (
+			`theater_id` VARCHAR(50) NOT NULL,
+			`theater_availability` TINYINT(1) NULL,
+			`row_seat` INT NULL,
+			`column_seat` INT NULL,
+			`total_seat` INT NULL,
+			PRIMARY KEY (`theater_id`)
+		);
         
 		INSERT INTO `theater` (`theater_id`, `theater_availability`, `row_seat`, `column_seat`, `total_seat`)
 		VALUES
@@ -92,18 +92,18 @@ BEGIN
         
         -- 상영일정 테이블 생성
         CREATE TABLE `schedule` (
-            `schedule_id` INT NOT NULL AUTO_INCREMENT,
-            `created_at` DATETIME NULL,
-            `screening_day` VARCHAR(255) NULL,
-            `screening_count` INT NULL,
-            `start_time` DATETIME NULL,
-            `end_time` DATETIME NULL,
-            `movie_id` INT NOT NULL,
-            `theater_id` VARCHAR(50) NOT NULL,
-            PRIMARY KEY (`schedule_id`),
-            FOREIGN KEY (`movie_id`) REFERENCES `movie`(`movie_id`),
-            FOREIGN KEY (`theater_id`) REFERENCES `theater`(`theater_id`)
-        );
+			`schedule_id` INT NOT NULL AUTO_INCREMENT,
+			`created_at` DATETIME NULL,
+			`screening_day` VARCHAR(255) NULL,
+			`screening_count` INT NULL,
+			`start_time` DATETIME NULL,
+			`end_time` DATETIME NULL,
+			`movie_id` INT NOT NULL,
+			`theater_id` VARCHAR(50) NOT NULL,
+			PRIMARY KEY (`schedule_id`),
+			FOREIGN KEY (`movie_id`) REFERENCES `movie`(`movie_id`),
+			FOREIGN KEY (`theater_id`) REFERENCES `theater`(`theater_id`)
+		);
         
         INSERT INTO `schedule` (`created_at`, `screening_day`, `screening_count`, `start_time`, `end_time`, `movie_id`, `theater_id`)
         VALUES
@@ -136,31 +136,37 @@ BEGIN
       
         
         -- 좌석 테이블 생성
-        CREATE TABLE `seat` (
-            `seat_id` INT NOT NULL AUTO_INCREMENT,
-            `theater_id` VARCHAR(50) NOT NULL,
-            `row` INT NULL,
-            `column` INT NULL,
-            PRIMARY KEY (`seat_id`),
-            FOREIGN KEY (`theater_id`) REFERENCES `theater`(`theater_id`)
-        );
+		CREATE TABLE `seat` (
+			`seat_id` INT NOT NULL AUTO_INCREMENT,
+			`theater_id` VARCHAR(50) NOT NULL,
+			`row` INT NULL,
+			`column` INT NULL,
+			`seat_availability`	tinyint(1)	NOT NULL,
+			PRIMARY KEY (`seat_id`),
+			FOREIGN KEY (`theater_id`) REFERENCES `theater`(`theater_id`)
+		);
         
-        INSERT INTO `seat` (`theater_id`, `row`, `column`)
+        INSERT INTO `seat` (`theater_id`, `row`, `column`, `seat_availability`)
 		VALUES
-		('A', 1, 1), ('A', 1, 2), ('A', 1, 3), ('A', 1, 4), ('A', 1, 5),
-		('A', 2, 1), ('A', 2, 2), ('A', 2, 3), ('A', 2, 4), ('A', 2, 5),
-		('B', 1, 1), ('B', 1, 2), ('B', 1, 3), ('B', 1, 4), ('B', 1, 5),
-		('B', 2, 1), ('B', 2, 2), ('B', 2, 3), ('B', 2, 4), ('B', 2, 5),
-		('C', 1, 1), ('C', 1, 2), ('C', 1, 3), ('C', 1, 4), ('C', 1, 5),
-		('C', 2, 1), ('C', 2, 2), ('C', 2, 3), ('C', 2, 4), ('C', 2, 5),
-        ('D', 1, 1), ('D', 1, 2), ('D', 1, 3), ('D', 1, 4), ('D', 1, 5),
-		('D', 2, 1), ('D', 2, 2), ('D', 2, 3), ('D', 2, 4), ('D', 2, 5),
-        ('E', 1, 1), ('E', 1, 2), ('E', 1, 3), ('E', 1, 4), ('E', 1, 5),
-		('E', 2, 1), ('E', 2, 2), ('E', 2, 3), ('E', 2, 4), ('E', 2, 5),
-        ('F', 1, 1), ('F', 1, 2), ('F', 1, 3), ('F', 1, 4), ('F', 1, 5),
-		('F', 2, 1), ('F', 2, 2), ('F', 2, 3), ('F', 2, 4), ('F', 2, 5);
+		('A', 1, 1, 1), ('A', 1, 2, 1), ('A', 1, 3, 1), ('A', 1, 4, 1), ('A', 1, 5, 0),
+		('A', 2, 1, 0), ('A', 2, 2, 0), ('A', 2, 3, 1), ('A', 2, 4, 0), ('A', 2, 5, 0),
         
-        -- 멤버 테이블 생성
+		('B', 1, 1, 0), ('B', 1, 2, 1), ('B', 1, 3, 1), ('B', 1, 4, 1), ('B', 1, 5, 1),
+		('B', 2, 1, 1), ('B', 2, 2, 1), ('B', 2, 3, 1), ('B', 2, 4, 0), ('B', 2, 5, 0),
+        
+		('C', 1, 1, 1), ('C', 1, 2, 1), ('C', 1, 3, 1), ('C', 1, 4, 1), ('C', 1, 5, 0),
+		('C', 2, 1, 0), ('C', 2, 2, 0), ('C', 2, 3, 0), ('C', 2, 4, 1), ('C', 2, 5, 0),
+        
+        ('D', 1, 1, 0), ('D', 1, 2, 1), ('D', 1, 3, 1), ('D', 1, 4, 0), ('D', 1, 5, 0),
+		('D', 2, 1, 0), ('D', 2, 2, 0), ('D', 2, 3, 1), ('D', 2, 4, 0), ('D', 2, 5, 0),
+        
+        ('E', 1, 1, 0), ('E', 1, 2, 0), ('E', 1, 3, 0), ('E', 1, 4, 0), ('E', 1, 5, 0),
+		('E', 2, 1, 0), ('E', 2, 2, 0), ('E', 2, 3, 1), ('E', 2, 4, 0), ('E', 2, 5, 0),
+        
+        ('F', 1, 1, 0), ('F', 1, 2, 0), ('F', 1, 3, 0), ('F', 1, 4, 0), ('F', 1, 5, 1),
+		('F', 2, 1, 1), ('F', 2, 2, 1), ('F', 2, 3, 0), ('F', 2, 4, 0), ('F', 2, 5, 0);
+        
+        -- member 테이블 insert
         INSERT INTO `member` (`member_id`, `name`, `phonenumber`, `email`, `role`)
 	    VALUES
 	   (1, '김철수', '01012345671', 'chulsoo@example.com', 'USER'),
@@ -177,85 +183,91 @@ BEGIN
 	   (12, '황지영', '01012345682', 'jieyong@example.com', 'USER');
         
         
-        -- 예약 테이블 생성
-        CREATE TABLE `reservation` (
-            `reservation_id` INT NOT NULL AUTO_INCREMENT,
-            `member_id` INT NOT NULL,
-            `schedule_id` INT NOT NULL,
-            `seat_id` INT NOT NULL,
-            `reservation_created_at` DATETIME NULL,
-            `reservation_status` VARCHAR(255) NULL,
-            PRIMARY KEY (`reservation_id`),
-            FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`),
-            FOREIGN KEY (`schedule_id`) REFERENCES `schedule`(`schedule_id`),
-            FOREIGN KEY (`seat_id`) REFERENCES `seat`(`seat_id`)
-        );
-
-		INSERT INTO `reservation` (`member_id`, `schedule_id`, `seat_id`, `reservation_created_at`, `reservation_status`)
-		VALUES
-		(1, 1, 1, '2024-01-15 09:00:00', 'CONFIRMED'),
-		(2, 2, 12, '2024-01-18 10:00:00', 'CONFIRMED'),
-		(3, 3, 23, '2024-02-03 11:00:00', 'CONFIRMED'),
-		(4, 4, 8, '2024-03-04 12:00:00', 'CONFIRMED'),
-		(5, 5, 18, '2024-04-05 13:00:00', 'CONFIRMED'),
-		(6, 6, 32, '2024-01-06 14:00:00', 'CONFIRMED'),
-		(7, 7, 55, '2024-01-07 15:00:00', 'CONFIRMED'),
-		(8, 8, 24, '2024-02-08 16:00:00', 'CONFIRMED'),
-		(9, 9, 48, '2024-03-09 17:00:00', 'CONFIRMED'),
-		(10, 10, 17, '2024-04-10 18:00:00', 'CONFIRMED'),
-		(11, 11, 29, '2024-01-11 19:00:00', 'CONFIRMED'),
-		(12, 12, 13, '2024-01-12 20:00:00', 'CONFIRMED'),
         
-        (1, 24, 15, '2024-01-14 09:00:00', 'CONFIRMED'),
-		(2, 23, 22, '2024-01-17 10:00:00', 'CONFIRMED'),
-		(3, 22, 14, '2024-03-28 11:00:00', 'CONFIRMED'),
-		(4, 21, 4, '2024-03-04 12:00:00', 'CONFIRMED'),
-		(5, 20, 57, '2024-02-05 13:00:00', 'CONFIRMED'),
-		(6, 19, 16, '2024-01-28 14:00:00', 'CONFIRMED'),
-		(7, 18, 2, '2024-01-10 15:00:00', 'CONFIRMED'),
-        (8, 17, 32, '2024-04-08 16:00:00', 'CONFIRMED'),
-		(9, 16, 3, '2024-03-09 17:00:00', 'CONFIRMED'),
-		(10, 15, 24, '2024-02-10 18:00:00', 'CONFIRMED'),
-        (11, 14, 38, '2024-01-11 19:00:00', 'CONFIRMED'),
-		(12, 13, 56, '2024-01-12 20:00:00', 'CONFIRMED');
+        -- 예매 테이블 생성
+        CREATE TABLE `reservation` (
+			`reservation_id` INT NOT NULL AUTO_INCREMENT,
+			`payment_method`	varchar(255) NOT NULL,
+			`payment_amount`	int4 NOT NULL,
+			`payment_status`	varchar(255)	NOT NULL,
+			`payment_date`	datetime NOT NULL,
+			`member_id` INT NOT NULL,
+			PRIMARY KEY (`reservation_id`),
+			FOREIGN KEY (`member_id`) REFERENCES `member`(`member_id`)
+		);
+
+		INSERT INTO `reservation` (`member_id`, `payment_method`, `payment_amount`, `payment_date`, `payment_status`)
+		VALUES
+		(1, '현금', 10000, '2024-01-15 09:00:00', 'CONFIRMED'),
+		(2, '카드 결제', 12000, '2024-01-18 10:00:00', 'CONFIRMED'),
+		(3, '휴대폰 결제', 15000, '2024-02-03 11:00:00', 'PENDING'),
+		(4, '현금', 8000, '2024-03-04 12:00:00', 'CONFIRMED'),
+		(5, '적립금 결제', 8500, '2024-04-05 13:00:00', 'PENDING'),
+		(6, '카드 결제', 12500, '2024-01-06 14:00:00', 'CONFIRMED'),
+		(7, '현금', 15000, '2024-01-07 15:00:00', 'CONFIRMED'),
+		(8, '휴대폰 결제', 9000, '2024-02-08 16:00:00', 'PENDING'),
+		(9, '현금', 8400, '2024-03-09 17:00:00', 'CONFIRMED'),
+		(10, '적립금 결제', 14500, '2024-04-10 18:00:00', 'CONFIRMED'),
+		(11, '카드 결제', 9900, '2024-01-11 19:00:00', 'PENDING'),
+		(12, '현금', 13500, '2024-01-12 20:00:00', 'CONFIRMED'),
+        
+        (1, '휴대폰 결제', 15000, '2024-01-14 09:00:00', 'CONFIRMED'),
+		(2, '카드 결제', 12000, '2024-01-17 10:00:00', 'CONFIRMED'),
+		(3, '적립금 결제', 14000, '2024-03-28 11:00:00', 'CONFIRMED'),
+		(4, '현금', 14000, '2024-03-04 12:00:00', 'CONFIRMED'),
+		(5, '적립금 결제', 17000, '2024-02-05 13:00:00', 'PENDING'),
+		(6, '휴대폰 결제', 16000, '2024-01-28 14:00:00', 'CONFIRMED'),
+		(7, '카드 결제', 12000, '2024-01-10 15:00:00', 'CONFIRMED'),
+        (8, '휴대폰 결제', 13200, '2024-04-08 16:00:00', 'PENDING'),
+		(9, '카드 결제', 13000, '2024-03-09 17:00:00', 'CONFIRMED'),
+		(10, '휴대폰 결제', 14000, '2024-02-10 18:00:00', 'PENDING'),
+        (11, '휴대폰 결제', 13800, '2024-01-11 19:00:00', 'CONFIRMED'),
+		(12, '현금', 15600, '2024-01-12 20:00:00', 'PENDING');
         
         -- 예매 테이블 생성
         CREATE TABLE `ticket` (
-            `ticket_id` INT NOT NULL AUTO_INCREMENT,
-            `reservation_id` INT NOT NULL,
-            `ticket_created_at` DATETIME NULL,
-            `ticket_status` VARCHAR(255) NULL,
-            PRIMARY KEY (`ticket_id`),
-            FOREIGN KEY (`reservation_id`) REFERENCES `reservation`(`reservation_id`)
-        );
+			`ticket_id` INT NOT NULL AUTO_INCREMENT,
+			`ticket_availibility`	tinyint(1)	NOT NULL,
+			`standard_price`	int4	NOT NULL,
+			`sale_price`	int4	NOT NULL,
+			`seat_id` INT NOT NULL,
+			`reservation_id` INT NOT NULL,
+			`schedule_id` INT NOT NULL,
+			`theater_id` VARCHAR(50) NOT NULL,
+			PRIMARY KEY (`ticket_id`),
+			FOREIGN KEY (`reservation_id`) REFERENCES `reservation`(`reservation_id`),
+			FOREIGN KEY (`schedule_id`) REFERENCES `schedule`(`schedule_id`),
+			FOREIGN KEY (`seat_id`) REFERENCES `seat`(`seat_id`),
+			FOREIGN KEY (`theater_id`) REFERENCES `theater`(`theater_id`)
+		);
         
-		INSERT INTO `ticket` (`reservation_id`, `ticket_created_at`, `ticket_status`)
+		INSERT INTO `ticket` (`reservation_id`, `ticket_availibility`, `standard_price`, `sale_price`, `schedule_id`, `seat_id`, `theater_id`)
 		VALUES
-		(1, '2024-01-15 11:00:00', 'VALID'),
-		(2, '2024-01-18 15:00:00', 'VALID'),
-		(3, '2024-02-03 18:00:00', 'VALID'),
-		(4, '2024-03-04 19:00:00', 'VALID'),
-		(5, '2024-04-05 21:00:00', 'VALID'),
-		(6, '2024-01-06 23:00:00', 'VALID'),
-		(7, '2024-01-07 15:20:00', 'VALID'),
-		(8, '2024-02-08 16:50:00', 'VALID'),
-		(9, '2024-03-09 17:10:00', 'VALID'),
-		(10, '2024-04-10 23:00:00', 'VALID'),
-		(11, '2024-01-11 19:50:00', 'VALID'),
-		(12, '2024-01-13 01:00:00', 'VALID'),
+		(1, 1, 15000, 10000, 1, 1, 'A'),
+		(2, 1, 15000, 12000, 2, 12, 'B'),
+		(3, 0, 15000, 15000, 3, 23, 'C'),
+		(4, 1, 15000, 8000, 4, 8, 'A'),
+		(5, 0, 15000, 8500, 5, 18, 'B'),
+		(6, 1, 15000, 12500, 6, 32, 'D'),
+		(7, 1, 15000, 15000, 7, 55, 'F'),
+		(8, 0, 15000, 9000, 8, 24, 'C'),
+		(9, 1, 15000, 8400, 9, 48, 'E'),
+		(10, 1, 15000, 14500, 10, 17, 'B'),
+		(11, 0, 15000, 9000, 11, 29, 'C'),
+		(12, 1, 15000, 13500, 12, 13, 'B'),
         
-        (1, '2024-01-15 10:00:00', 'VALID'), 
-		(2, '2024-01-18 15:00:00', 'VALID'),
-		(3, '2024-03-30 18:00:00', 'VALID'), 
-		(4, '2024-03-04 19:00:00', 'VALID'), 
-		(5, '2024-02-05 21:00:00', 'VALID'), 
-		(6, '2024-01-28 23:00:00', 'VALID'), 
-		(7, '2024-01-11 15:20:00', 'VALID'), 
-		(8, '2024-04-08 17:50:00', 'VALID'), 
-		(9, '2024-03-09 19:20:00', 'VALID'), 
-		(10, '2024-02-12 23:50:00', 'VALID'), 
-		(11, '2024-01-11 19:50:00', 'VALID'), 
-		(12, '2024-01-13 01:00:00', 'VALID'); 
+        (13, 1, 15000, 15000, 24, 15, 'B'), 
+		(14, 1, 15000, 12000, 23, 22, 'C'),
+		(15, 1, 15000, 14000, 22, 14, 'B'), 
+		(16, 1, 15000, 14000, 21, 4, 'A'), 
+		(17, 0, 17000, 17000, 20, 57, 'F'), 
+		(18, 1, 16000, 16000, 19, 16, 'B'), 
+		(19, 1, 15000, 12000, 18, 2, 'A'), 
+		(20, 0, 15000, 13200, 17, 33, 'D'), 
+		(21, 1, 15000, 13000, 16, 3, 'A'), 
+		(22, 0, 15000, 14000, 15, 21, 'C'), 
+		(23, 1, 15000, 13000, 14, 38, 'D'), 
+		(24, 0, 15000, 15600, 13, 56, 'F'); 
 
     END IF;
 END//
