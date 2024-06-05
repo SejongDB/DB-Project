@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS UpdateMember;
 
 DELIMITER //
 CREATE PROCEDURE UpdateMember(
-    IN input_admin_id INT, 
+    IN input_admin_name VARCHAR(255),
     IN target_member_id INT,
     IN input_new_user_name VARCHAR(255), 
     IN input_new_user_phonenumber VARCHAR(255),
@@ -12,7 +12,7 @@ CREATE PROCEDURE UpdateMember(
 )
 BEGIN
 
-    IF input_admin_id = 0 THEN -- 관리자만 해당 쿼리를 실행할 수 있도록
+    IF input_admin_name = 'root' THEN -- 관리자만 해당 쿼리를 실행할 수 있도록
         UPDATE member
         SET name = input_new_user_name, 
             phonenumber = input_new_user_phonenumber, 
@@ -25,7 +25,7 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL UpdateMember(0, 2, '김수정', '01033334444', 'kimsoojung@example.com');
+CALL UpdateMember('root', 2, '김수민', '01033334444', 'kimsoojung@example.com');
 select * from member where member_id = 2;
 
 

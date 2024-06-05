@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS CreateMember;
 
 DELIMITER //
 CREATE PROCEDURE CreateMember(
-    IN input_admin_id INT, 
+    IN input_admin_name VARCHAR(255), 
     IN input_user_name VARCHAR(255), 
     IN input_user_phonenumber VARCHAR(255),
     IN input_user_email VARCHAR(255),
@@ -12,7 +12,7 @@ CREATE PROCEDURE CreateMember(
 )
 BEGIN
 
-    IF input_admin_id = 0 THEN -- 관리자만 해당 쿼리를 실행할 수 있도록
+    IF input_admin_name = 'root' THEN -- 관리자만 해당 쿼리를 실행할 수 있도록
         INSERT INTO `member` (`name`, `phonenumber`, `email`, `role`)
         VALUES (input_user_name, input_user_phonenumber, input_user_email, 'USER');
         SET output_created_user_id = LAST_INSERT_ID();
@@ -26,6 +26,6 @@ DELIMITER ;
 
 SET @output_user_id = NULL;
 
-CALL CreateMember(0, '김수빈', '01011112222', 'kimsubin@example.com', @output_user_id);
+CALL CreateMember('root', '김수박', '01011112222', 'kimsubak@example.com', @output_user_id);
 SELECT @output_user_id, m.name FROM member m WHERE m.member_id = @output_user_id;
 
