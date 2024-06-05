@@ -3,14 +3,15 @@ import java.sql.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class db2 {
-
-    private static final String ADMIN_USERNAME = "root";
-    private static final String ADMIN_PASSWORD = "1234";
     private static final String USER_USERNAME = "user1";
     private static final String USER_PASSWORD = "user1";
-
+    
     public static void main(String[] args) {
         System.setProperty("apple.awt.application.appearance", "system");
 
@@ -135,32 +136,91 @@ public class db2 {
         }
     }
 
-    //**관리자 페이지(관리자 로그인 성공 시 나오는 화면)**
+//**관리자 페이지(관리자 로그인 성공 시 나오는 화면)**
     private static void showAdminBoard() {
-        JFrame adminFrame = new JFrame("Admin Board");
-        adminFrame.setSize(800, 600);
-        adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel adminPanel = new JPanel();
-        adminPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+	    JFrame adminFrame = new JFrame("Admin Board");
+	    adminFrame.setSize(800, 600);
+	    adminFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    JPanel adminPanel = new JPanel();
+	    adminPanel.setLayout(new GridBagLayout());
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.insets = new Insets(10, 10, 10, 10);
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
+	
+	    // 버튼 이름 배열
+	    String[] buttonLabels = {"전체조회", "입력(추가)", "삭제/변경", "초기화"};
+	
+	    // 버튼 추가
+	    for (int i = 0; i < buttonLabels.length; i++) {
+	        JButton button = new JButton(buttonLabels[i]);
+	        button.setPreferredSize(new Dimension(150, 50));
+	        gbc.gridx = i; // 각 버튼의 위치를 가로로 설정
+	        gbc.gridy = 0; // 모든 버튼을 첫 번째 행에 배치
+	        adminPanel.add(button, gbc);
+	    }
+	
+	    adminFrame.getContentPane().add(adminPanel, BorderLayout.NORTH); // 패널을 프레임 상단에 추가
+	
+	    // 데이터베이스에서 관리자 전체 조회 함수 호출 및 결과 출력
+	    JTextArea textArea = new JTextArea(20, 70);
+	    JScrollPane scrollPane = new JScrollPane(textArea);
+	    adminFrame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+	
+	    try {
+	        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db2?serverTimezone=UTC", "root", "1234");
+	
+	        // 기존 프로시저가 존재하면 삭제
+	        String dropProcedure = "DROP PROCEDURE IF EXISTS ExecuteAdminAllTablesReadQuery";
+	        Statement stmt = conn.createStatement();
+	        stmt.execute(dropProcedure);
+	
+	        // 저장 프로시저 생성
+	        String createProcedure = "CREATE PROCEDURE ExecuteAdminAllTablesReadQuery (IN user_id INT) " +
+	                "BEGIN " +
+	                "DECLARE user_role VARCHAR(255); " +
+	                "SELECT role INTO user_role FROM member WHERE member_id = user_id LIMIT 1; " +
+	                "IF user_role = 'ADMIN' THEN " +
+	                "SELECT * FROM member; " +
+	                "SELECT * FROM movie; " +
+	                "SELECT * FROM reservation; " +
+	                "SELECT * FROM schedule; " +
+	                "SELECT * FROM seat; " +
+	                "SELECT * FROM theater; " +
+	                "SELECT * FROM ticket; " +
+	                "ELSE " +
+	                "SELECT '관리자만 해당 쿼리를 실행할 수 있습니다.' AS message; " +
+	                "END IF; " +
+	                "END";
+	
+	        stmt.execute(createProcedure);
+	
+	        // 프로시저 호출
+	        CallableStatement cstmt = conn.prepareCall("{CALL ExecuteAdminAllTablesReadQuery(?)}");
+	        cstmt.setInt(1, 0); // 관리자 ID는 0
+	
+	        boolean hasResults = cstmt.execute();
+	        while (hasResults) {
+	            ResultSet rs = cstmt.getResultSet();
+	            ResultSetMetaData rsmd = rs.getMetaData();
+	            int columnsNumber = rsmd.getColumnCount();
+	
+	            while (rs.next()) {
+	                for (int i = 1; i <= columnsNumber; i++) {
+	                    if (i > 1) textArea.append(",  ");
+	                    String columnValue = rs.getString(i);
+	                    textArea.append(rsmd.getColumnName(i) + ": " + columnValue);
+	                }
+	                textArea.append("\n");
+	            }
+	            hasResults = cstmt.getMoreResults();
+	        }
+	    } catch (SQLException ex) {
+	        textArea.setText("SQLException: " + ex.getMessage());
+	    }
+	
+	    adminFrame.setVisible(true);
+	}
 
-        // 버튼 이름 배열
-        String[] buttonLabels = {"전체조회", "입력(추가)", "삭제/변경", "초기화"};
-
-        // 버튼 추가
-        for (int i = 0; i < buttonLabels.length; i++) {
-            JButton button = new JButton(buttonLabels[i]);
-            button.setPreferredSize(new Dimension(150, 50));
-            gbc.gridx = i; // 각 버튼의 위치를 가로로 설정
-            gbc.gridy = 0; // 모든 버튼을 첫 번째 행에 배치
-            adminPanel.add(button, gbc);
-        }
-
-        adminFrame.getContentPane().add(adminPanel, BorderLayout.NORTH); // 패널을 프레임 상단에 추가
-        adminFrame.setVisible(true);
-    }
 
     //**유저 페이지(유저 로그인 성공 시 나오는 화면)**
     private static void showUserBoard() {
