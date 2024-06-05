@@ -171,20 +171,20 @@ BEGIN
 		('G', 2, 1, 0), ('G', 2, 2, 0), ('G', 2, 3, 0), ('G', 2, 4, 0), ('G', 2, 5, 0);
         
         -- member 테이블 insert
-        INSERT INTO `member` (`member_id`, `name`, `phonenumber`, `email`, `role`)
+        INSERT INTO `member` (`name`, `phonenumber`, `email`, `role`)
 	    VALUES
-	   (1, '김철수', '01012345671', 'chulsoo@example.com', 'USER'),
-	   (2, '이영희', '01012345672', 'younghee@example.com', 'USER'),
-	   (3, '박민수', '01012345673', 'minsoo@example.com', 'USER'),
-	   (4, '최지은', '01012345674', 'jieun@example.com', 'USER'),
-	   (5, '정현우', '01012345675', 'hyunwoo@example.com', 'USER'),
-	   (6, '문수진', '01012345676', 'sujin@example.com', 'USER'),
-	   (7, '장준혁', '01012345677', 'junhyuk@example.com', 'USER'),
-	   (8, '서하나', '01012345678', 'hana@example.com', 'USER'),
-	   (9, '윤세준', '01012345679', 'sejun@example.com', 'USER'),
-	   (10, '한지민', '01012345670', 'jimin@example.com', 'USER'),
-	   (11, '백은우', '01012345681', 'eunwoo@example.com', 'USER'),
-	   (12, '황지영', '01012345682', 'jieyong@example.com', 'USER');
+	   ('김철수', '01012345671', 'chulsoo@example.com', 'USER'),
+	   ('이영희', '01012345672', 'younghee@example.com', 'USER'),
+	   ('박민수', '01012345673', 'minsoo@example.com', 'USER'),
+	   ('최지은', '01012345674', 'jieun@example.com', 'USER'),
+	   ('정현우', '01012345675', 'hyunwoo@example.com', 'USER'),
+	   ('문수진', '01012345676', 'sujin@example.com', 'USER'),
+	   ('장준혁', '01012345677', 'junhyuk@example.com', 'USER'),
+	   ('서하나', '01012345678', 'hana@example.com', 'USER'),
+	   ('윤세준', '01012345679', 'sejun@example.com', 'USER'),
+	   ('한지민', '01012345670', 'jimin@example.com', 'USER'),
+	   ('백은우', '01012345681', 'eunwoo@example.com', 'USER'),
+	   ('황지영', '01012345682', 'jieyong@example.com', 'USER');
         
         
         
