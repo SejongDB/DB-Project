@@ -53,7 +53,7 @@ CREATE TABLE `seat` (
 );
 
 CREATE TABLE `member` (
-	`member_id`	INT	NOT NULL,
+	`member_id`	INT	NOT NULL AUTO_INCREMENT,
 	`name`	varchar(255)	NULL,
 	`phonenumber`	varchar(255)	NULL,
 	`email`	varchar(255)	NULL,

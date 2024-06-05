@@ -12,14 +12,14 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS LoginAdmin;
 
--- root/1234 로그인 시 자동 관리자 계정 member_id 0 할당되도록
+-- root/1234 로그인 시 자동 관리자 계정 member_id 1 할당되도록
 DELIMITER //
 CREATE PROCEDURE LoginAdmin(IN input_username VARCHAR(255), IN input_password VARCHAR(255), OUT output_admin_id INT)
 BEGIN
 	DECLARE member_id INT;
     
     IF input_username = 'root' AND input_password = '1234' THEN
-        SET member_id = 0;
+        SET member_id = 1;
         CALL GrantAdminPrivileges();
     ELSE
         SET member_id = NULL;

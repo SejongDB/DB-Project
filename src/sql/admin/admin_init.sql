@@ -6,8 +6,8 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
 
 -- 3. member 테이블에 관리자 계정 추가
 -- 관리자 계정 name이 존재하지 않으면 insert
-INSERT INTO `member` (`member_id`, `name`, `phonenumber`, `email`, `role`)
-SELECT 0, 'root', '01073947182', 'admin@example.com', 'ADMIN'
+INSERT INTO `member` (`name`, `phonenumber`, `email`, `role`)
+SELECT 'root', '01073947182', 'admin@example.com', 'ADMIN'
 WHERE (SELECT COUNT(*) FROM `member` WHERE `name` = 'root') = 0;
 
 -- procedure 함수 초기화
@@ -171,20 +171,20 @@ BEGIN
 		('G', 2, 1, 0), ('G', 2, 2, 0), ('G', 2, 3, 0), ('G', 2, 4, 0), ('G', 2, 5, 0);
         
         -- member 테이블 insert
-        INSERT INTO `member` (`member_id`, `name`, `phonenumber`, `email`, `role`)
+        INSERT INTO `member` (`name`, `phonenumber`, `email`, `role`)
 	    VALUES
-	   (1, '김철수', '01012345671', 'chulsoo@example.com', 'USER'),
-	   (2, '이영희', '01012345672', 'younghee@example.com', 'USER'),
-	   (3, '박민수', '01012345673', 'minsoo@example.com', 'USER'),
-	   (4, '최지은', '01012345674', 'jieun@example.com', 'USER'),
-	   (5, '정현우', '01012345675', 'hyunwoo@example.com', 'USER'),
-	   (6, '문수진', '01012345676', 'sujin@example.com', 'USER'),
-	   (7, '장준혁', '01012345677', 'junhyuk@example.com', 'USER'),
-	   (8, '서하나', '01012345678', 'hana@example.com', 'USER'),
-	   (9, '윤세준', '01012345679', 'sejun@example.com', 'USER'),
-	   (10, '한지민', '01012345670', 'jimin@example.com', 'USER'),
-	   (11, '백은우', '01012345681', 'eunwoo@example.com', 'USER'),
-	   (12, '황지영', '01012345682', 'jieyong@example.com', 'USER');
+	   ('김철수', '01012345671', 'chulsoo@example.com', 'USER'),
+	   ('이영희', '01012345672', 'younghee@example.com', 'USER'),
+	   ('박민수', '01012345673', 'minsoo@example.com', 'USER'),
+	   ('최지은', '01012345674', 'jieun@example.com', 'USER'),
+	   ('정현우', '01012345675', 'hyunwoo@example.com', 'USER'),
+	   ('문수진', '01012345676', 'sujin@example.com', 'USER'),
+	   ('장준혁', '01012345677', 'junhyuk@example.com', 'USER'),
+	   ('서하나', '01012345678', 'hana@example.com', 'USER'),
+	   ('윤세준', '01012345679', 'sejun@example.com', 'USER'),
+	   ('한지민', '01012345670', 'jimin@example.com', 'USER'),
+	   ('백은우', '01012345681', 'eunwoo@example.com', 'USER'),
+	   ('황지영', '01012345682', 'jieyong@example.com', 'USER');
         
         
         
@@ -202,7 +202,6 @@ BEGIN
 
 		INSERT INTO `reservation` (`member_id`, `payment_method`, `payment_amount`, `payment_date`, `payment_status`)
 		VALUES
-		(1, '현금', 10000, '2024-01-15 09:00:00', 'CONFIRMED'),
 		(2, '카드 결제', 12000, '2024-01-18 10:00:00', 'CONFIRMED'),
 		(3, '휴대폰 결제', 15000, '2024-02-03 11:00:00', 'PENDING'),
 		(4, '현금', 8000, '2024-03-04 12:00:00', 'CONFIRMED'),
@@ -214,8 +213,8 @@ BEGIN
 		(10, '적립금 결제', 14500, '2024-04-10 18:00:00', 'CONFIRMED'),
 		(11, '카드 결제', 9900, '2024-01-11 19:00:00', 'PENDING'),
 		(12, '현금', 13500, '2024-01-12 20:00:00', 'CONFIRMED'),
+        (13, '현금', 10000, '2024-01-15 09:00:00', 'CONFIRMED'),
         
-        (1, '휴대폰 결제', 15000, '2024-01-14 09:00:00', 'CONFIRMED'),
 		(2, '카드 결제', 12000, '2024-01-17 10:00:00', 'CONFIRMED'),
 		(3, '적립금 결제', 14000, '2024-03-28 11:00:00', 'CONFIRMED'),
 		(4, '현금', 14000, '2024-03-04 12:00:00', 'CONFIRMED'),
@@ -226,7 +225,8 @@ BEGIN
 		(9, '카드 결제', 13000, '2024-03-09 17:00:00', 'CONFIRMED'),
 		(10, '휴대폰 결제', 14000, '2024-02-10 18:00:00', 'PENDING'),
         (11, '휴대폰 결제', 13800, '2024-01-11 19:00:00', 'CONFIRMED'),
-		(12, '현금', 15600, '2024-01-12 20:00:00', 'PENDING');
+		(12, '현금', 15600, '2024-01-12 20:00:00', 'PENDING'),
+        (13, '휴대폰 결제', 15000, '2024-01-14 09:00:00', 'CONFIRMED');
         
         -- 예매 테이블 생성
         CREATE TABLE `ticket` (
