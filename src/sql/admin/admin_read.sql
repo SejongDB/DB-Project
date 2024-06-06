@@ -23,5 +23,5 @@ END//
 
 DELIMITER ;
 
--- 관리자는 member 테이블에서 id가 0
-CALL ExecuteAdminAllTablesReadQuery(0);
+-- 관리자는 member 테이블에서 id가 1
+CALL ExecuteAdminAllTablesReadQuery(1);
