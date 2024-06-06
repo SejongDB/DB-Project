@@ -26,6 +26,7 @@ BEGIN
     END IF;
     
     SET output_admin_id = member_id;
+    SELECT output_admin_id;
 END //
 DELIMITER ;
 
@@ -33,4 +34,4 @@ DELIMITER ;
 
 SET @output_admin_id = NULL;
 CALL LoginAdmin('root', '1234', @output_admin_id);
-SELECT @output_admin_id, m.name  from member m where m.member_id = @output_admin_id ;
+
