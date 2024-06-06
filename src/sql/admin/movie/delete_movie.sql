@@ -28,5 +28,5 @@ BEGIN
 END//
 DELIMITER ;
 
--- 관리자의 member_id == 0
-CALL DeleteMovie(0, 13);
+-- 관리자의 member_id == 1
+CALL DeleteMovie(1, 13);
