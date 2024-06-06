@@ -173,11 +173,11 @@ public class db2 {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        String[] buttonLabels = {"전체조회", "입력(추가)", "삭제/변경", "초기화"};
+        String[] buttonLabels = {"전체조회", "입력(추가)", "삭제", "변경", "초기화"};
 
         for (int i = 0; i < buttonLabels.length; i++) {
             JButton button = new JButton(buttonLabels[i]);
-            button.setPreferredSize(new Dimension(150, 50));
+            button.setPreferredSize(new Dimension(100, 35));
             gbc.gridx = i;
             gbc.gridy = 0;
             adminPanel.add(button, gbc);
@@ -194,10 +194,24 @@ public class db2 {
                         showCreateEntityDialog();
                     }
                 });
-            }else if ("삭제/변경".equals(buttonLabels[i])) {
+            }else if ("삭제".equals(buttonLabels[i])) {
                 button.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         showDeleteEntityDialog();
+                    }
+                });
+            }
+            else if ("변경".equals(buttonLabels[i])) {
+                button.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        //showDeleteEntityDialog();
+                    }
+                });
+            }
+            else if ("초기".equals(buttonLabels[i])) {
+                button.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        //showDeleteEntityDialog();
                     }
                 });
             }
