@@ -26,7 +26,7 @@ BEGIN
         
     ELSE
         SET output_created_movie_id = NULL;
-        SELECT '관리자만 새로운 사용자 정보를 추가할 수 있습니다.' AS Message;
+        SELECT '관리자만 새로운 사용자 영화를 추가할 수 있습니다.' AS Message;
     END IF;
 END //
 DELIMITER ;

@@ -19,7 +19,7 @@ BEGIN
 		(input_theater_id, input_theater_availability, input_row_seat, input_column_seat, input_total_seat);
         
     ELSE
-        SELECT '관리자만 새로운 사용자 정보를 추가할 수 있습니다.' AS Message;
+        SELECT '관리자만 새로운 상영관을 추가할 수 있습니다.' AS Message;
     END IF;
 END //
 DELIMITER ;
