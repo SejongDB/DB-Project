@@ -20,4 +20,4 @@ DELIMITER ;
 
 SET @output_member_id = NULL;
 CALL LoginUser('user1', 'user1', @output_member_id);
-SELECT @output_member_id, name  from member m where m.member_id = @output_member_id ;
+SELECT @output_member_id;
