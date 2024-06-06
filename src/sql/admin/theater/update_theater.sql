@@ -28,8 +28,8 @@ BEGIN
 END//
 DELIMITER ;
 
--- 프로시저 호출 예시 (관리자의 member_id == 0)
-CALL UpdateTheaterByMovie(0, 2);
+-- 프로시저 호출 예시 (관리자의 member_id == 1)
+CALL UpdateTheaterByMovie(1, 2);
 
 
 select * from schedule;
