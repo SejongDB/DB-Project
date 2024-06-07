@@ -27,5 +27,5 @@ BEGIN
 END //
 DELIMITER ;
 
--- user1/user1로 로그인한 유저의 member_id == 1
-CALL ViewReservations(1);
+-- user1/user1로 로그인한 유저의 member_id == 2
+CALL ViewReservations(2);
