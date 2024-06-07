@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS ViewOneReservationDetails;
 DELIMITER //
 CREATE PROCEDURE ViewOneReservationDetails(
 	IN input_member_id INT,
-    IN input_ticket_id INT
+    IN input_ticket_id INT -- 본인이 예매한 티켓 id를 알면 예매내역 상세 조회 가능
 )
 BEGIN
     DECLARE is_user_role BOOLEAN;
@@ -34,5 +34,5 @@ BEGIN
 END //
 DELIMITER ;
 
--- user1/user1로 로그인한 유저 (member_id == 1)가 예매한 영화 중 하나
-CALL ViewOneReservationDetails(1, 13);
+-- user1/user1로 로그인한 유저 (member_id == 2)가 예매한 영화 중 하나
+CALL ViewOneReservationDetails(2, 13);

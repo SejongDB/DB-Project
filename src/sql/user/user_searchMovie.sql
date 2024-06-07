@@ -2,7 +2,7 @@ USE db2;
 
 DROP PROCEDURE IF EXISTS SearchMovies;
 DELIMITER //
-CREATE PROCEDURE SearchMovies(
+CREATE PROCEDURE SearchMovies( -- 요구사항 명세서에 입력 안된 정보는 무시하라고 해서 null 허용한 부분이고 영화 조회 기능임
     IN input_member_id INT,
     IN movie_title VARCHAR(255),
     IN director_name VARCHAR(255),
@@ -27,4 +27,4 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL SearchMovies(1, '무야호', NULL, NULL, NULL);
+CALL SearchMovies(2, '무야호', NULL, NULL, NULL);

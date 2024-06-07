@@ -5,9 +5,9 @@ DROP PROCEDURE IF EXISTS makeUserReservation;
 DELIMITER //
 
 CREATE PROCEDURE makeUserReservation(
-    IN input_member_id INT,
-    IN input_schedule_id INT,
-    IN input_seat_id INT,
+    IN input_member_id INT, -- 로그인한 member_id = 2를 고정 
+    IN input_schedule_id INT, -- 유저가 선택하고 싶은 상영 일정 id 넘기고
+    IN input_seat_id INT, -- 해당 영화가 상영되는 상영관 아이디를 참고해서 해당 상영관 좌석 id를 넘기면 됨
     OUT output_reservation_id INT,
     OUT output_ticket_id INT
 )
@@ -58,7 +58,7 @@ END //
 
 DELIMITER ;
 
-CALL makeUserReservation(1, 24, 19, @output_reservation_id, @output_ticket_id);
+CALL makeUserReservation(2, 24, 19, @output_reservation_id, @output_ticket_id);
 SELECT @output_reservation_id, @output_ticket_id;
 
 SELECT * FROM reservation WHERE member_id = 1;

@@ -6,7 +6,7 @@ DELIMITER //
 
 CREATE PROCEDURE deleteUserReservation(
     IN input_member_id INT,
-    IN input_reservation_id INT
+    IN input_reservation_id INT -- 유저가 본인 예매 내역 조회 후 삭제하고 싶은 예매 내역 id를 념기면 됨
 )
 BEGIN
 
@@ -30,7 +30,7 @@ END //
 
 DELIMITER ;
 
-CALL deleteUserReservation(1,25);
+CALL deleteUserReservation(2,25);
 select * from reservation where reservation_id = 25;
 select * from ticket where ticket_id = 25;
 select * from seat where seat_id = 19;
