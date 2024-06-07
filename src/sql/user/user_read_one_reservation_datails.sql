@@ -23,10 +23,11 @@ BEGIN
                th.theater_availability AS 상영관사용여부,
                th.row_seat AS 상영관가로좌석수,
                th.column_seat AS 상영관세로좌석수,
-               th.total_seat AS 상영관전체좌석수
-        FROM ticket ti, schedule s, theater th
+               th.total_seat AS 상영관전체좌석수,
+               r.reservation_id AS 예매아이디
+        FROM ticket ti, schedule s, theater th, reservation r
         WHERE (ti.ticket_id = input_ticket_id and ti.schedule_id = s.schedule_id 
-        and s.theater_id = th.theater_id and ti.theater_id = th.theater_id);
+        and s.theater_id = th.theater_id and ti.theater_id = th.theater_id and r.reservation_id = ti.reservation_id);
 			
     ELSE
         SELECT 'USER 회원 권한인 사용자만 예매 내역을 조회할 수 있습니다.' AS Message;
