@@ -11,7 +11,6 @@ BEGIN
 
     IF user_role = 'USER' THEN
         SELECT * FROM schedule;
-        SELECT * FROM ticket t, reservation r, member m where m.member_id = user_id and r.member_id = m.member_id and r.reservation_id = t.reservation_id;
     ELSE
         SELECT '관리자의 경우 관리자 계정으로 로그인해주세요.' AS message;
     END IF;
